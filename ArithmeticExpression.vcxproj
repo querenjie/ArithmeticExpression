@@ -165,6 +165,7 @@
     <ClInclude Include="MathExpressExecutor.h" />
     <ClInclude Include="MathExpressService.h" />
     <ClInclude Include="NumberUtil.h" />
+    <ClInclude Include="SyntaxAnalysisPhase.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

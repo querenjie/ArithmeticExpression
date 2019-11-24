@@ -81,7 +81,9 @@ void DoubleLinkList<T>::deleteAllDataNode() {
 		p = p->prior;					//p指向前一个节点
 		q->next = NULL;					//砍断最后一个节点的next指针
 		q->prior = NULL;				//砍断最后一个节点的prior指针
-		p->next = this->head;			//最后第二个节点的next指针指向头节点
+		if (p != NULL) {
+			p->next = this->head;			//最后第二个节点的next指针指向头节点
+		}
 		this->head->prior = p;			//头节点的prior指针指向最后第二个节点
 		cout << "销毁尾巴数据节点 q(" << q->data << ")" << endl;
 		free(q);

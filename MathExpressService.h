@@ -6,6 +6,7 @@
 #include <list>
 #include <string>
 #include "GlobalConstVars.h"
+#include "SyntaxAnalysisPhase.h"
 
 using namespace std;
 
@@ -33,6 +34,11 @@ public:
 	*	根据词法分析的输出结果计算表达式的值
 	*/
 	string calculateExpression(list<LexicalAnalysisWordAndType> lexicalAnalysisResultList);
+
+	/**
+	*	检查语法是否有问题
+	*/
+	bool checkSyntax(list<LexicalAnalysisWordAndType> lexicalAnalysisResultList);
 };
 
 string MathExpressService::getNormalizedExpression(string mathExpression) {
@@ -60,6 +66,8 @@ list<LexicalAnalysisWordAndType> MathExpressService::getLexicalAnalysisResult(st
 	Status isLexicalAnalysisProcessOK = lexicalAnalysisPhase.generateLexicalAnalysisResultTableList(ccNormalizedExpression, wordAndTypeResultList);
 	if (isLexicalAnalysisProcessOK == ERROR) {
 		cout << "未能通过词法分析阶段" << endl;
+		list<LexicalAnalysisWordAndType> wordAndTypeResultListEmpty;
+		return wordAndTypeResultListEmpty;
 	}
 	return wordAndTypeResultList;
 
@@ -78,4 +86,10 @@ bool MathExpressService::checkParenthesesPair(string expression) {
 string MathExpressService::calculateExpression(list<LexicalAnalysisWordAndType> lexicalAnalysisResultList) {
 	MathExpressExecutor mathExpressExecutor;
 	return mathExpressExecutor.evaluateExpression(lexicalAnalysisResultList);
+}
+
+bool MathExpressService::checkSyntax(list<LexicalAnalysisWordAndType> lexicalAnalysisResultList) {
+	SyntaxAnalysisPhase syntaxAnalysisPhase(lexicalAnalysisResultList);
+	bool isSyntaxOK = syntaxAnalysisPhase.checkSyntax();
+	return isSyntaxOK;
 }

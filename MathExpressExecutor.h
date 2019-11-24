@@ -16,7 +16,20 @@ using namespace std;
 class MathExpressExecutor {
 private:
 	string operators[7] = { "+", "-", "*", "/", "(", ")", "=" };	//表达式中的操作符。这就是算符优先表中对应的行头和列头，算符优先表是个二维的表格。
-	//算符优先关系表，其行和列就是operators数组。至于这个关系表是如何产生的这要参考编译原理的相关内容，过程比较复杂，在此不作解释。
+	/**
+	*	算符优先关系表，其行和列就是operators数组。至于这个关系表是如何产生的这要参考编译原理的相关制作算符优先表的内容，过程比较复杂，在此不作解释。
+	*	算符优先表的内容如下所示：
+	*			| "+", "-", "*", "/", "(", ")", "=" |
+	*			|-----------------------------------|
+	*		"+" | '>', '>', '<', '<', '<', '>', '>'	|
+	*		"-"	| '>', '>', '<', '<', '<', '>', '>' |
+	*		"*"	| '>', '>', '>', '>', '<', '>', '>' |
+	*		"/"	| '>', '>', '>', '>', '<', '>', '>' |
+	*		"("	| '<', '<', '<', '<', '<', '=', ' ' |
+	*		")"	| '>', '>', '>', '>', ' ', '>', '>' |
+	*		"="	| '<', '<', '<', '<', '<', ' ', '=' |
+	*			|-----------------------------------|
+	*/
 	const char precedences[7][7] = { 
 									{'>', '>', '<', '<', '<', '>', '>'}, 
 									{'>', '>', '<', '<', '<', '>', '>'},
@@ -39,9 +52,10 @@ private:
 	char getPrecede(string operatorWord1, string operatorWord2);				//从算符优先关系表中获得对应的优先值
 	/*
 	*	对2个数根据指定的操作符进行运算，得到新的值。
-	*	第四个参数hasA表示操作数栈中是否存在a，因为一个操作符并不一定会对应2个操作数，有时只能对应一个操作数。
+	*	a在表达式中是比b在前面的那个操作数。例如表达式为：3-4=，那么a就是3，b就是4
+	*	第四个参数hasFirstOperandInStack表示操作数栈中是否存在a，因为一个操作符并不一定会对应2个操作数，有时只能对应一个操作数。比如：-4
 	*/
-	double operate(double a, string operatorWord, double b, bool hasA);
+	double operate(double a, string operatorWord, double b, bool hasFirstOperandInStack);
 
 	/*
 	*	string转数值类型
@@ -74,9 +88,9 @@ char MathExpressExecutor::getPrecede(string operatorWord1, string operatorWord2)
 	return this->precedences[indexOfOperatorWord1][indexOfOperatorWord2];
 }
 
-double MathExpressExecutor::operate(double a, string operatorWord, double b, bool hasA) {
+double MathExpressExecutor::operate(double a, string operatorWord, double b, bool hasFirstOperandInStack) {
 	double result = 0;
-	if (!hasA) {
+	if (!hasFirstOperandInStack) {
 		//如果没有操作数a，进行如下处理
 		if (operatorWord == "+") {
 			result = b;
@@ -170,6 +184,10 @@ string MathExpressExecutor::evaluateExpression(list<LexicalAnalysisWordAndType> 
 					operandStack.pop();
 				}
 
+				if (data1 == "") {
+					//说明操作数栈已经没数据了，这说明表达式有问题。
+					return "ERROR";
+				}
 				double dblData1 = this->stringToNum<double>(data1);
 				double dblData2 = 0;
 				bool hasData2 = false;	//data2是否存在
@@ -177,11 +195,15 @@ string MathExpressExecutor::evaluateExpression(list<LexicalAnalysisWordAndType> 
 					dblData2 = this->stringToNum<double>(data2);
 					hasData2 = true;
 				}
-				//值得注意的是：由于栈是先进后出的，再表达式中data2在前面，data1在后面。在做减法或除法的时候一定要注意顺序。
+				//值得注意的是：由于栈是先进后出的，在表达式中data2在前面，data1在后面。在做减法或除法的时候一定要注意顺序。
 				double tempResult = this->operate(dblData2, operatorWord, dblData1, hasData2);
 				operandStack.push(to_string(tempResult));
 				//cout << "operandStack <== " << to_string(tempResult) << endl;
 				i--;
+			}
+			if (precedence == ' ') {
+				//从优先级表中得到的优先级为' '说明表达式有问题，应该返回错误而不应该计算值。
+				return "ERROR";
 			}
 		}
 	}

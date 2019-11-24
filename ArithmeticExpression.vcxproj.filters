@@ -53,5 +53,8 @@
     <ClInclude Include="LexicalAnalysisPhase.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="SyntaxAnalysisPhase.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
