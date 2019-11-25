@@ -6,8 +6,11 @@
 using namespace std;
 
 /**
-*	语法分析阶段要处理的事情
-*	文法的产生式定义如下：
+*	语法分析阶段要处理的事情。本语法分析过程采用的是有递归的预测分析
+*	原始的贴近人类思维的文法产生式：
+*		E->E+F|E-F|E*F|E/F|F
+*		F->(E)|i
+*	很容易得出消除左递归后的文法产生式定义如下：
 *		E->FE'
 *		E'->+FE'|-FE'|*FE'|/FE'|空
 *		F->(E)|i
@@ -67,11 +70,17 @@ SyntaxAnalysisPhase::~SyntaxAnalysisPhase() {
 
 }
 
+/**
+*	E->FE'
+*/
 void SyntaxAnalysisPhase::E() {
 	F();
 	E_();
 }
 
+/**
+*	E'->+FE'|-FE'|*FE'|/FE'|空
+*/
 void SyntaxAnalysisPhase::E_() {
 	if (this->currentIndex >= this->lengthOfWordAndTypePtr) {
 		return;
@@ -99,6 +108,9 @@ void SyntaxAnalysisPhase::E_() {
 	}
 }
 
+/**
+*	F->(E)|i
+*/
 void SyntaxAnalysisPhase::F() {
 	if (this->currentIndex >= this->lengthOfWordAndTypePtr) {
 		return;
@@ -114,12 +126,12 @@ void SyntaxAnalysisPhase::F() {
 			this->match(")");
 		}
 		else {
-			cout << "语法错误。在第" + (this->currentIndex + 1) << "个元素" << this->wordPtr[this->currentIndex] << endl;
+			cout << "Syntax Error, at word offset of " << (this->currentIndex + 1) << ", lack of word \")\" " << endl;
 			this->passedSyntaxCheck = false;
 		}
 	}
 	else {
-		cout << "语法错误。在第" + (this->currentIndex + 1) << "个元素" << this->wordPtr[this->currentIndex] << endl;
+		cout << "Syntax Error, at word offset of " << (this->currentIndex + 1) << " with content " << this->wordPtr[this->currentIndex] << endl;
 		this->passedSyntaxCheck = false;
 	}
 
@@ -130,22 +142,22 @@ void SyntaxAnalysisPhase::match(string token) {
 	string currentType = this->typePtr[currentIndex];
 	if (token == "i") {
 		if (currentType == "OPERAND") {
-			cout << "匹配了：" << currentWord << endl;
+			cout << "matched：" << currentWord << endl;
 			this->currentIndex++;
 		}
 		else {
 			this->passedSyntaxCheck = false;
-			cout << "语法不匹配。在第" << (this->currentIndex + 1) << "个单词" << currentWord << endl;
+			cout << "mismatched word at offset " << (this->currentIndex + 1) << " with content " << currentWord << endl;
 		}
 	}
 	else {
 		if (currentWord == token) {
-			cout << "匹配了：" << currentWord << endl;
+			cout << "matched：" << currentWord << endl;
 			this->currentIndex++;
 		}
 		else {
 			this->passedSyntaxCheck = false;
-			cout << "语法不匹配。在第" << (this->currentIndex + 1) << "个单词" << currentWord << endl;
+			cout << "mismatched word at offset " << (this->currentIndex + 1) << " with content " << currentWord << endl;
 		}
 	}
 }
@@ -154,7 +166,7 @@ bool SyntaxAnalysisPhase::checkSyntax() {
 	E();
 	if (this->currentIndex < this->lengthOfWordAndTypePtr) {
 		this->passedSyntaxCheck = false;
-		cout << "语法错误：在第 " << (this->currentIndex + 1) << " 个因子：" << this->wordPtr[this->currentIndex] << endl;
+		cout << "Syntax error occured at word offset of " << (this->currentIndex + 1) << " with word content " << this->wordPtr[this->currentIndex] << endl;
 	}
 	return this->passedSyntaxCheck;
 }
