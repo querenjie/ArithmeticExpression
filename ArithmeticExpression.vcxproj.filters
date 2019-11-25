@@ -29,9 +29,6 @@
     <ClInclude Include="DoubleLinkNode.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="ExpressionAutomation.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="GlobalConstVars.h">
       <Filter>头文件</Filter>
     </ClInclude>

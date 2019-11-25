@@ -157,7 +157,6 @@
     <ClInclude Include="DoubleLinkList.h" />
     <ClInclude Include="DoubleLinkListForExpression.h" />
     <ClInclude Include="DoubleLinkNode.h" />
-    <ClInclude Include="ExpressionAutomation.h" />
     <ClInclude Include="GlobalConstVars.h" />
     <ClInclude Include="LexicalAnalysisPhase.h" />
     <ClInclude Include="LexicalAnalysisWordAndType.h" />
