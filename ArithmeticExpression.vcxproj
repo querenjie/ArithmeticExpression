@@ -158,13 +158,16 @@
     <ClInclude Include="DoubleLinkListForExpression.h" />
     <ClInclude Include="DoubleLinkNode.h" />
     <ClInclude Include="GlobalConstVars.h" />
+    <ClInclude Include="GrammerProductionRuleUnit.h" />
     <ClInclude Include="LexicalAnalysisPhase.h" />
     <ClInclude Include="LexicalAnalysisWordAndType.h" />
     <ClInclude Include="MathExpressDFA.h" />
     <ClInclude Include="MathExpressExecutor.h" />
     <ClInclude Include="MathExpressService.h" />
     <ClInclude Include="NumberUtil.h" />
+    <ClInclude Include="SqStack.h" />
     <ClInclude Include="SyntaxAnalysisPhase.h" />
+    <ClInclude Include="SyntaxAnalysisPhase2.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -53,5 +53,14 @@
     <ClInclude Include="SyntaxAnalysisPhase.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="SqStack.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="SyntaxAnalysisPhase2.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="GrammerProductionRuleUnit.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

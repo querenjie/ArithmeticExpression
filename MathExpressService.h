@@ -7,6 +7,7 @@
 #include <string>
 #include "GlobalConstVars.h"
 #include "SyntaxAnalysisPhase.h"
+#include "SyntaxAnalysisPhase2.h"
 
 using namespace std;
 
@@ -89,7 +90,25 @@ string MathExpressService::calculateExpression(list<LexicalAnalysisWordAndType> 
 }
 
 bool MathExpressService::checkSyntax(list<LexicalAnalysisWordAndType> lexicalAnalysisResultList) {
+	cout << "以下是执行有递归的预测分析：" << endl;
 	SyntaxAnalysisPhase syntaxAnalysisPhase(lexicalAnalysisResultList);
 	bool isSyntaxOK = syntaxAnalysisPhase.checkSyntax();
-	return isSyntaxOK;
+	if (isSyntaxOK) {
+		cout << "通过有递归的预测分析的语法分析" << endl;
+	}
+	else {
+		cout << "未能通过有递归的预测分析的语法分析" << endl;
+	}
+
+	cout << "以下是执行非递归的预测分析：" << endl;
+	SyntaxAnalysisPhase2 syntaxAnalysisPhase2(lexicalAnalysisResultList);
+	bool isSyntaxOK2 = syntaxAnalysisPhase2.checkSyntax();
+	if (isSyntaxOK2) {
+		cout << "通过非递归的预测分析的语法分析" << endl;
+	}
+	else {
+		cout << "未能通过非递归的预测分析的语法分析" << endl;
+	}
+
+	return isSyntaxOK && isSyntaxOK2;
 }

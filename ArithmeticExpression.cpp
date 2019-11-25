@@ -60,4 +60,5 @@ int main()
 	string strResult = mathExpressService.calculateExpression(lexicalAnalysisWordAndTypeList);
 	cout << "---------------------------------------------------------" << endl;
 	cout << "表达式求值的结果：" << normalizedExpression << strResult << endl;
+
 }
